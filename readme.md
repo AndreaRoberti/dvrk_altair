@@ -30,3 +30,9 @@ catkin config --cmake-args -DCMAKE_BUILD_TYPE=Release
 catkin build
 ```
 
+Then, you can source your *catkin_ws* 
+
+``` bash
+source dvrk_src/devel/setup.bash
+``` 
+
