@@ -1,0 +1,286 @@
+/* -*- Mode: Javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+{
+    "base-arduino-mac": "2B:0D:3D:47:80:A3"
+    ,
+    "arms":
+    [
+        {
+            "name": "ECM",
+            "arduino-mac": "68:7E:57:32:FD:63",
+            "serial-number": "0000",
+            "primary-offsets":   [ 0.039, -2.4, -2.88, -2.39],
+            "primary-scales":    [-1.7e-05, 7.3e-05, 8.76e-05, 7.3e-05],
+            "secondary-offsets": [ 0.039, -2.4, -2.88, -2.39],
+            "secondary-scales":  [-1.7e-05, 7.3e-05, 8.76e-05, 7.3e-05],
+            "DH": {
+                "links": [
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.1471,
+                        "type": "prismatic",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.5861,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.3302, "theta": 0.0000, "D": 0.1397,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.3302, "theta": 0.0000, "D": 0.0549,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 1.5708, "A": 0.1352, "theta":-1.2217, "D": 0.0000, // -70 degrees = -1.2217 rad
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha":-1.5708, "A": 0.0000, "theta": 0.0000, "D": 0.0000,
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    }
+                ]
+            },
+            "world-origin-to-suj": {
+                "Translation": [0.0 , 0.1262, 0.0],
+                "Rotation" : [[ 0.0, -1.0,  0.0],
+                              [ 1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            },
+            "suj-tip-to-tool-origin": {
+                "Translation": [0.8343, 0.0, 0.0],
+                "Rotation" : [[ 0.0,  1.0,  0.0],
+                              [-1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            }
+        }
+        ,
+        {
+            "name": "PSM1",
+            "arduino-mac": "6A:2D:0C:DF:CB:9D",
+            "serial-number": "0000",
+            "primary-offsets":   [ 0.034, -2.39, -3.8, 2.39],
+            "primary-scales":    [-1.7e-05, 7.3e-05, 7.3e-05, -7.3e-05],
+            "secondary-offsets": [0.034, -2.39, -3.8, 2.39],
+            "secondary-scales":  [-1.7e-05, 7.3e-05, 7.3e-05, -7.3e-05],
+            "DH": {
+                "links": [
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.1471,
+                        "type": "prismatic",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.6654,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D": 0.1397,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D":-0.1301,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 1.5708, "A": 0.0490, "theta":-0.7854, "D": 0.0000, // -45 degrees = -0.7854 rad
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha":-1.5708, "A": 0.0000, "theta": 0.0000, "D": 0.0000,
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    }
+                ]
+            },
+            "world-origin-to-suj": {
+                "Translation": [-0.2019 , -0.0757, 0.0],
+                "Rotation" : [[-1.0,  0.0,  0.0],
+                              [ 0.0, -1.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            },
+            "suj-tip-to-tool-origin": {
+                "Translation": [0.8343, 0.0, 0.0],
+                "Rotation" : [[ 0.0,  1.0,  0.0],
+                              [-1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            }
+        }
+        ,
+        {
+            "name": "PSM2",
+            "arduino-mac": "48:CF:9D:1F:41:C9",
+            "serial-number": "0000",
+            "primary-offsets":   [ 0.039, -2.42484, -0.97679, 2.43054],
+            "primary-scales":    [-1.71779e-05, 7.29637e-05, 7.28496e-05, -7.3568e-05],
+            "secondary-offsets": [ 0.039, -2.41912, -0.990611, 2.42459],
+            "secondary-scales":  [-1.71599e-05, 7.28341e-05, 7.33879e-05, -7.3418e-05],
+            "DH": {
+                "links": [
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.1471,
+                        "type": "prismatic",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.6654,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D": 0.1397,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D":-0.1301,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 1.5708, "A": 0.0490, "theta":-0.7854, "D": 0.0000, // -45 degrees = -0.7854 rad
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha":-1.5708, "A": 0.0000, "theta": 0.0000, "D": 0.0000,
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    }
+                ]
+            },
+            "world-origin-to-suj": {
+                "Translation": [0.2019 , -0.0757, 0.0],
+                "Rotation" : [[ 1.0,  0.0,  0.0],
+                              [ 0.0,  1.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            },
+            "suj-tip-to-tool-origin": {
+                "Translation": [0.8343, 0.0, 0.0],
+                "Rotation" : [[ 0.0,  1.0,  0.0],
+                              [-1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            }
+        }
+        ,
+        {
+            "name": "PSM3",
+            "arduino-mac": "B1:C8:4A:41:32:E3",
+            "serial-number": "0000",
+            "primary-offsets":   [ 0.036, -2.39, 1.87, -2.88, 1.88],
+            "primary-scales":    [-1.7e-05, 7.3e-05, -7.3e-05, 8.76e-05, -7.3e-05],
+            "secondary-offsets": [ 0.036, -2.39, 1.87, -2.88, 1.88],
+            "secondary-scales":  [-1.7e-05, 7.3e-05, -7.3e-05, 8.76e-05, -7.3e-05],
+            "DH": {
+                "links": [
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.0455,
+                        "type": "prismatic",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.0000, "theta": 0.0000, "D": 0.5887,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.3429, "theta": 0.0000, "D":-0.2667,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D": 0.1397,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 0.0000, "A": 0.4572, "theta": 0.0000, "D":-0.1864,
+                        "type": "revolute",
+                        "mode": "active",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha": 1.5708, "A": 0.0483, "theta":-0.2618, "D": 0.0000, // -15 degrees = -0.2618 rad
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    },
+                    {
+                        "convention": "modified",
+                        "alpha":-1.5708, "A": 0.0000, "theta": 0.0000, "D": 0.0000,
+                        "type": "revolute",
+                        "mode": "passive",
+                        "offset": 0.0
+                    }
+                ]
+            },
+            "world-origin-to-suj": {
+                "Translation": [0.0 , -0.2776, 0.0],
+                "Rotation" : [[ 0.0,  1.0,  0.0],
+                              [-1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            },
+            "suj-tip-to-tool-origin": {
+                "Translation": [0.8343, 0.0, 0.0],
+                "Rotation" : [[ 0.0,  1.0,  0.0],
+                              [-1.0,  0.0,  0.0],
+                              [ 0.0,  0.0,  1.0]]
+            }
+        }
+    ]
+}

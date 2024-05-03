@@ -1,0 +1,15 @@
+{
+    // see https://github.com/jhu-dvrk/sawIntuitiveResearchKit/wiki/Configuration-File-Formats
+    "io": {
+	"close-all-relays": true
+    }
+    ,
+    "arms":
+    [
+        {
+            "name": "MTML",
+            "type": "MTM",
+            "serial": "28989"
+        }
+    ]
+}

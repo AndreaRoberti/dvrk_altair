@@ -1,0 +1,60 @@
+// -*- Mode: C++; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*-
+// ex: set filetype=cpp softtabstop=4 shiftwidth=4 tabstop=4 cindent expandtab:
+
+inline-header {
+#include <cisstVector/vctDynamicMatrixTypes.h>
+// Always include last
+#include <cisstParameterTypes/prmExport.h>
+}
+
+class {
+    name prmActuatorJointCoupling;
+    attribute CISST_EXPORT;
+
+    member {
+        name ActuatorToJointPosition;
+        type vctDoubleMat;
+    }
+
+    member {
+        name JointToActuatorPosition;
+        type vctDoubleMat;
+        default vctDoubleMat(0, 0);
+    }
+
+    member {
+        name ActuatorToJointEffort;
+        type vctDoubleMat;
+        default vctDoubleMat(0, 0);
+    }
+
+    member {
+        name JointToActuatorEffort;
+        type vctDoubleMat;
+        default vctDoubleMat(0, 0);
+    }
+
+    inline-header {
+    public:
+        inline const prmActuatorJointCoupling & Assign(const prmActuatorJointCoupling & other) {
+            ActuatorToJointPosition().ForceAssign(other.ActuatorToJointPosition());
+            JointToActuatorPosition().ForceAssign(other.JointToActuatorPosition());
+            ActuatorToJointEffort().ForceAssign(other.ActuatorToJointEffort());
+            JointToActuatorEffort().ForceAssign(other.JointToActuatorEffort());
+            return *this;
+        }
+        inline const prmActuatorJointCoupling & Assign(const vctDoubleMat & other) {
+            ActuatorToJointPosition().ForceAssign(other);
+            JointToActuatorPosition().ForceAssign(other);
+            ActuatorToJointEffort().ForceAssign(other);
+            JointToActuatorEffort().ForceAssign(other);
+            return *this;
+        }
+        inline bool Equal(const prmActuatorJointCoupling & other) {
+            return (ActuatorToJointPosition().Equal(other.ActuatorToJointPosition()) &&
+                    JointToActuatorPosition().Equal(other.JointToActuatorPosition()) &&
+                    ActuatorToJointEffort().Equal(other.ActuatorToJointEffort()) &&
+                    JointToActuatorEffort().Equal(other.JointToActuatorEffort()));
+        }
+    }
+}

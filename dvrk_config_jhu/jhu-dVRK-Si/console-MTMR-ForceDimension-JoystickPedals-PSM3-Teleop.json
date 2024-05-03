@@ -1,0 +1,83 @@
+/* -*- Mode: Javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+{
+    "io": {
+        "port": "udp"
+        // "port": "fw"
+    }
+    ,
+    "component-manager": {
+        "components":
+        [
+            {
+                "shared-library": "sawForceDimensionSDK",
+                "class-name": "mtsForceDimension",
+                "constructor-arg": {
+                    "Name": "ForceDimensionSDK"
+                },
+                "configure-parameter": "omega7-11311.json"
+            }
+            ,
+            {
+                "shared-library": "sawJoystick",
+                "class-name": "mtsJoystick",
+                "constructor-arg": {
+                    "Name": "joystick"
+                },
+                "configure-parameter": "misc/sawJoystickConfiguration.json"
+            }
+        ]
+    }
+    ,
+    "console-inputs":
+    {
+        "operator-present": {
+            "component": "joystick",
+            "interface": "OperatorPresent"
+        }
+        ,
+        "clutch": {
+            "component": "joystick",
+            "interface": "Clutch"
+        }
+    }
+    ,
+    "arms":
+    [
+        {
+            "name": "MTMR",  // created previously using custom components
+            "type": "MTM_GENERIC",
+            "component": "ForceDimensionSDK",
+            "interface": "MTMR"
+        }
+        ,
+        {
+            "name": "PSM3",
+            "type": "PSM",
+            "serial": "28007",
+            "base-frame": {
+                "reference-frame": "FD",
+                "transform": [[  1.0,  0.0,  0.0,  0.0],
+                              [  0.0,  1.0,  0.0,  0.0 ],
+                              [  0.0,  0.0,  1.0,  0.0 ],
+                              [  0.0,  0.0,  0.0,  1.0 ]]
+            }
+        }
+    ]
+    ,
+    "psm-teleops":
+    [
+        {
+            "mtm": "MTMR",
+            "psm": "PSM3",
+            "configure-parameter": {
+                "gripper-scaling": {
+                    "max": 0.492,
+                    "zero": 0.25
+                },
+                "align-mtm": false,
+                "ignore-jaw": true,
+                "scale": 0.5
+            }
+        }
+    ]
+}

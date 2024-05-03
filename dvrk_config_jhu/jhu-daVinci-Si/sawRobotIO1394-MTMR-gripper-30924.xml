@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<Config Version="5">
+  <Robot Name="MTMR-Gripper" HardwareVersion="DQLA" NumOfActuator="1" NumOfJoint="1" SN="30924" Type="io-only">
+    <Actuator ActuatorID="0" AxisID="7" BoardID="2" Type="Revolute">
+      <Drive>
+        <AmpsToBits Offset="32777" Scale="-5242.8800"/>
+        <BitsToFeedbackAmps Offset="6.226415" Scale="-0.000190735"/>
+        <NmToAmps Scale="0.3600544114"/>
+        <MaxCurrent Unit="A" Value="0.000"/>
+      </Drive>
+      <Encoder VelocitySource="SOFTWARE">
+        <BitsToPosSI Scale="360.000000000000000" Unit="deg"/>
+        <PositionLimitsSoft Lower="0.0" Upper="0.0" Unit="deg"/>
+      </Encoder>
+      <AnalogIn>
+        <BitsToVolts Offset="0" Scale="6.866455078125e-05"/>
+        <VoltsToPosSI Offset="283.006587" Scale="-84.639029" Unit="deg"/>
+      </AnalogIn>
+    </Actuator>
+  </Robot>
+</Config>

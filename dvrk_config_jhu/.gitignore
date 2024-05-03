@@ -1,0 +1,7 @@
+cisstLog.txt
+**/cisstLog.txt
+**/cisstLog*.txt
+*~
+CMakeLists.txt.user
+*-new
+*-backup-*

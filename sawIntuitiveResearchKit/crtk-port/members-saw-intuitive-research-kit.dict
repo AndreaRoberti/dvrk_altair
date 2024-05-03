@@ -1,0 +1,169 @@
+ConfigurationJointKinematics = m_kin_configuration_js
+ConfigurationJointPID = m_pid_configuration_js
+StateJointKinematics = m_kin_measured_js
+StateJointDesiredKinematics = m_kin_setpoint_js
+StateJointPID = m_pid_measured_js
+StateJointDesiredPID = m_pid_setpoint_js
+
+BaseFrame = m_base_frame
+SetBaseFrame = set_base_frame
+
+CartesianGet = m_measured_cp_frame
+CartesianGetDesired = m_setpoint_cp_frame
+CartesianGetLocal = m_local_measured_cp_frame
+CartesianGetLocalDesired = m_local_setpoint_cp_frame
+
+CartesianGetParam = m_measured_cp
+CartesianGetDesiredParam = m_setpoint_cp
+CartesianGetLocalParam = m_local_measured_cp
+CartesianGetLocalDesiredParam = m_local_setpoint_cp
+
+CartesianVelocityGetParam = m_measured_cv
+mWrenchGet = m_body_measured_cf
+
+mPowered = m_powered
+mIsSimulated = m_simulated
+mEncoderBiased = m_encoders_biased
+mCartesianReady = IsCartesianReady
+mJointReady = IsJointReady
+mOperatingState = m_operating_state
+
+PowerOn = power_on
+PowerOff = power_off
+Home = home
+
+mControlSpace = m_control_space
+mControlMode = m_control_mode
+
+mGravityCompensation = m_gravity_compensation
+mCartesianImpedance = m_cartesianImpedance
+mHasNewPIDGoal = m_new_pid_goal
+mEffortOrientationLocked = m_effort_orientation_locked
+
+OperatingStateCommand = state_command
+
+GetJacobianBody = body_jacobian
+mJacobianBody = m_body_jacobian
+GetJacobianSpatial = spatial_jacobian
+mJacobianSpatial = m_spatial_jacobian
+
+ConfigurationJaw = jaw_configuration_js
+JawConfiguration = jaw_configuration_js
+GetConfigurationJaw = jaw_configuration_js
+
+StateJaw = m_jaw_measured_js
+GetStateJaw = jaw_measured_js
+StateJawDesired = m_jaw_setpoint_js
+GetStateJawDesired = jaw_setpoint_js
+
+SetPositionJaw = jaw_servo_jp
+SetPositionGoalJaw = jaw_move_jp
+SetEffortJaw = jaw_servo_jf
+
+StateGripper = m_gripper_measured_js
+GetStateGripper = gripper_measured_js
+ConfigurationGripper = m_gripper_configuration_js
+
+GripperClosed = m_gripper_closed
+
+UNINITIALIZED = DISABLED
+EnterUninitialized = EnterDisabled
+TransitionUninitialized = TransitionDisabled
+
+POWERED = ENABLED
+EnterPowered = EnterEnabled
+TransitionPowered = TransitionEnabled
+
+ARM_HOMED = HOMED
+
+HOMING_ARM = HOMING
+EnterHomingArm = EnterHoming
+RunHomingArm = RunHoming
+
+Robot = Arm
+RobotInterface = m_arm_interface
+
+SetGravityCompensation = use_gravity_compensation
+SetWrenchBodyOrientationAbsolute = body_set_cf_orientation_absolute
+SetCartesianImpedanceGains = set_cartesian_impedance_gains
+
+SetJointVelocityRatio = trajectory_j_set_ratio_v
+SetJointAccelerationRatio = trajectory_j_set_ratio_a
+JointVelocityRatio = trajectory_j_ratio_v
+JointAccelerationRatio = trajectory_j_ratio_a
+VelocityRatioEvent = trajectory_j_ratio_v_event
+AccelerationRatioEvent = trajectory_j_ratio_a_event
+GoalReachedEvent = goal_reached_event
+GoalReached = goal_reached
+
+DesiredState = desired_state
+CurrentState = current_state
+
+LockOrientation = lock_orientation
+UnlockOrientation = unlock_orientation
+
+mWrenchType = m_cf_type
+mWrenchSet = m_cf_set
+mWrenchBodyOrientationAbsolute = m_body_cf_orientation_absolute
+
+EmulateOperatorPresent = emulate_operator_present
+EmulateCamera = emulate_camera
+EmulateClutch = emulate_clutch
+
+SetAdapterPresent = set_adapter_present
+SetToolPresent = set_tool_present
+SetToolType = set_tool_type
+ToolTypeRequest = tool_type_request
+ToolType = tool_type
+
+SetEndoscopeType = set_endoscope_type
+EndoscopeType = endoscope_type
+
+TeleopEnable = teleop_enable
+CycleTeleopPSMByMTM = cycle_teleop_psm_by_mtm
+SelectTeleopPSM = select_teleop_psm
+TeleopPSMSelected = teleop_psm_selected
+TeleopPSMUnselected = teleop_psm_unselected
+
+SetScale = set_scale
+Scale = scale
+StringToSpeech = string_to_speech
+
+Lock = lock
+Locked = locked
+FocusIn = focus_in
+FocusOut = focus_out
+FocusingIn = focusing_in
+FocusingOut = focusing_out
+Following = following
+LockRotation = lock_rotation
+LockTranslation = lock_translation
+RotationLocked = rotation_locked
+TranslationLocked = translation_locked
+GetAlignOffset = alignment_offset
+align_offset = alignment_offset
+SetAlignMTM = set_align_mtm
+SetRegistrationRotation = set_registration_rotation
+
+BaseFrameValid = m_base_frame_valid
+JointSet = m_servo_jp
+JointSetParam = m_servo_jp_param
+JointVelocitySet = m_servo_jv
+FeedForwardParam = m_feed_forward_jf
+SetFeedForwardJoint = feed_forward_jf
+SetPositionJointLocal = servo_jp_internal
+SetEffortJointLocal = servo_jf_internal
+UseFeedForward = use_feed_forward
+UpdateFeedForward = update_feed_forward
+
+ControlPositionJoint = control_servo_jp
+ControlPositionGoalJoint = control_move_jp
+ControlPositionCartesian = control_servo_cp
+ControlPositionGoalCartesian = control_move_cp
+ControlEffortJoint = control_servo_jf
+ControlEffortCartesian = control_servo_cf
+
+ControlEffortCartesianPreload = control_servo_cf_preload
+AddGravityCompensationEfforts = control_add_gravity_compensation
+AddCustomEfforts = control_add_jf
+ControlEffortOrientationLocked = control_servo_cf_orientation_locked

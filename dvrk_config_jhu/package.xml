@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>dvrk_config_jhu</name>
+  <version>2.2.1</version>
+  <description>JHU dVRK config files</description>
+  <maintainer email="anton.deguet@jhu.edu">Anton Deguet</maintainer>
+  <license>MIT</license>
+  <url>https://github.com/jhu-dvrk/dvrk-config-jhu</url>
+  <export>
+    <build_type>cmake</build_type>
+  </export>
+</package>

@@ -1,0 +1,79 @@
+/* -*- Mode: Javascript; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 4 -*- */
+{
+    "io": {
+        "port": "udp"
+        // "port": "fw"
+        // , "firewire-protocol": "broadcast-read-write"
+    }
+    ,
+    "component-manager": {
+        "components":
+        [
+            {
+                "shared-library": "sawSensablePhantom",
+                "class-name": "mtsSensableHD",
+                "constructor-arg": {
+                    "Name": "Sensable"
+                },
+                "configure-parameter": "sawSensablePhantomUSBTouch.json"
+            }
+            ,
+            {
+                "shared-library": "sawJoystick",
+                "class-name": "mtsJoystick",
+                "constructor-arg": {
+                    "Name": "joystick"
+                },
+                "configure-parameter": "misc/sawJoystickConfiguration.json"
+            }
+        ]
+    }
+    ,
+    "console-inputs":
+    {
+        "operator-present": {
+            "component": "joystick",
+            "interface": "OperatorPresent"
+        }
+        ,
+        "clutch": {
+            "component": "joystick",
+            "interface": "Clutch"
+        }
+    }
+    ,
+    "arms":
+    [
+        {
+            "name": "MTMR",  // created previously using custom components
+            "type": "MTM_GENERIC",
+            "component": "Sensable",
+            "interface": "arm"
+        }
+        ,
+        {
+            "name": "PSM3",
+            "type": "PSM",
+            "serial": "28007",
+            "base-frame": {
+                "reference-frame": "Touch",
+                "transform": [[ -1.0,  0.0,  0.0,  0.0],
+                              [  0.0,  0.0,  1.0,  0.0 ],
+                              [  0.0,  1.0,  0.0,  0.0 ],
+                              [  0.0,  0.0,  0.0,  1.0 ]]
+            }
+        }
+    ]
+    ,
+    "psm-teleops":
+    [
+        {
+            "mtm": "MTMR",
+            "psm": "PSM3",
+            "configure-parameter": {
+                "ignore-jaw": true,
+                "align-mtm": false
+            }
+        }
+    ]
+}
