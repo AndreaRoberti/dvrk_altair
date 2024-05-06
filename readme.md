@@ -15,7 +15,7 @@ sudo apt install libxml2-dev libraw1394-dev libncurses5-dev qtcreator swig sox e
 
 ```
 
-## How To
+## How To Build
 
 - Create your own *catkin_ws*
 
