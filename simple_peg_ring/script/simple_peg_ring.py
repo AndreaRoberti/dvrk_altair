@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 import numpy
+
+numpy.set_printoptions(suppress=True)
+
 import rospy
 
 import crtk
@@ -27,8 +30,8 @@ class SimplePegRing():
         self.pegs_sub_ = rospy.Subscriber(self.pegs_topic_name_, PoseArray, self.pegs_callback)
         
 
-        self.rings_poses_ = PoseArray()
-        self.pegs_poses_ = PoseArray()
+        self.rings_poses_ = [] # PoseArray()
+        self.pegs_poses_ = [] # PoseArray()
 
         self.ral = ral
 
@@ -40,13 +43,21 @@ class SimplePegRing():
                             arm_name = 'PSM2',
                             expected_interval = 0.01)
 
-        ## HOME MEGLIO DA INTERFACCIA
-        #self.home(self.psm1_)
-        #self.home(self.psm2_)
+
+        self.tf_listener_ = tf.TransformListener()
+
+        # psm1_rot_matrix = tf.transformations.quaternion_matrix([0.000, -0.000, -0.574, 0.819])
+        # psm1_trasl_matrix = tf.transformations.translation_matrix( [0.655, -1.399, -0.799])
         
-        ## FACCIO QUANDO VOGLIO DARE IL COMANDO 
-        #self.prepare_cartesian(self.psm1_)
-        #self.prepare_cartesian(self.psm1_)
+        #  rosrun tf tf_echo /world /PSM1_base -  source_frame target_frame
+        psm1_trasl_matrix = tf.transformations.translation_matrix([-1.538, -0.138, 0.799])
+        psm1_rot_matrix = tf.transformations.quaternion_matrix([-0.000, 0.000, 0.574, 0.819])
+
+        self.psm1_base_to_world_ = numpy.dot(psm1_trasl_matrix, psm1_rot_matrix)
+
+        psm2_rot_matrix = tf.transformations.quaternion_matrix([-0.000, -0.000, -0.819, 0.574])
+        psm2_trasl_matrix = tf.transformations.translation_matrix( [-0.657, -1.400, -0.799])
+        self.psm2_base_to_world_ = numpy.dot(psm2_trasl_matrix, psm2_rot_matrix)
 
     def home(self, arm):
         self.ral.check_connections()
@@ -90,9 +101,128 @@ class SimplePegRing():
         self.pegs_poses_ = msg.poses
         # print(len(self.pegs_poses_))
 
+    def test_kinematics(self):
+        self.home(self.psm1_)
+        # self.prepare_cartesian(self.psm1_)
+
+        initial_cartesian_position = PyKDL.Frame()
+        initial_cartesian_position.p = self.psm1_.setpoint_cp().p
+        initial_cartesian_position.M = self.psm1_.setpoint_cp().M
+        goal = PyKDL.Frame()
+        goal.p = self.psm1_.setpoint_cp().p
+        goal.M = self.psm1_.setpoint_cp().M
+        
+        amplitude = 0.05 # 5 cm
+
+         # first motion
+        goal.p[0] =  initial_cartesian_position.p[0] 
+        goal.p[1] =  initial_cartesian_position.p[1]
+        goal.p[2] =  initial_cartesian_position.p[2] 
+        
+        initial_matrix_t = tf.transformations.translation_matrix( [initial_cartesian_position.p[0], initial_cartesian_position.p[1], initial_cartesian_position.p[2]])
+        initial_matrix_rot = numpy.array([[ initial_cartesian_position.M[0,0], initial_cartesian_position.M[0,1], initial_cartesian_position.M[0,2], 0 ],
+                                          [ initial_cartesian_position.M[1,0], initial_cartesian_position.M[1,1], initial_cartesian_position.M[1,2], 0 ],
+                                          [ initial_cartesian_position.M[2,0], initial_cartesian_position.M[2,1], initial_cartesian_position.M[2,2], 0 ],
+                                          [0,0,0,1]] )
+        initial_matrix = numpy.dot(initial_matrix_t,initial_matrix_rot)
+        print(initial_matrix)
+
+        # print(goal.p)
+        # print(goal.M)
+        print("------------------------------------")
+        if (len(self.rings_poses_) > 0):
+            for i in range(5, 6):
+                ring_matrix = tf.transformations.translation_matrix( [self.rings_poses_[i].position.x, self.rings_poses_[i].position.y, self.rings_poses_[i].position.z])
+                ring_psm1_base = numpy.dot(self.psm1_base_to_world_,ring_matrix)
+                # print(self.psm1_base_to_world_)
+                print(ring_matrix)
+                print("PSM1 WRT WORLD")
+                psm1_to_world = numpy.dot(self.psm1_base_to_world_,initial_matrix)
+                print(psm1_to_world)
+
+                inv_ring_matrix = numpy.linalg.inv(ring_matrix)
+                transform_ring_to_psm = numpy.dot(inv_ring_matrix, psm1_to_world)
+                print(transform_ring_to_psm)
+
+                xring = transform_ring_to_psm[0][3] 
+                yring = transform_ring_to_psm[1][3]
+                zring = transform_ring_to_psm[2][3]
+                
+                print(xring, ' ', yring, ' ', zring)
+                
+                goal.p[0] = goal.p[0] - xring #puo essere piu o meno in base alla direzioni degli assi 
+                goal.p[1] = goal.p[1] + yring
+                goal.p[2] = goal.p[2] - zring
+
+                self.psm1_.move_cp(goal).wait(is_busy = True)
+
+                # self.psm1_.jaw.close().wait()
+
+                # xpeg = self.pegs_poses_[i].position.x 
+                # ypeg = self.pegs_poses_[i].position.y
+                # zpeg = self.pegs_poses_[i].position.z
+
+                # goal.p[0] = goal.p[0] + xpeg #puo essere piu o meno in base alla direzioni degli assi 
+                # goal.p[1] = goal.p[1] + ypeg
+                # goal.p[2] = goal.p[2] - zpeg
+                
+                # print('closing and moving right (1)')
+                # self.psm1_.move_cp(goal).wait(is_busy = True)
+                # self.psm1_.jaw.close().wait()
+            #else :
+        #       print('do run coppelia')
+
+    def test2_kinematics(self):
+        self.prepare_cartesian(self.psm2_)
+
+        initial_cartesian_position = PyKDL.Frame()
+        initial_cartesian_position.p = self.psm2_.setpoint_cp().p
+        initial_cartesian_position.M = self.psm2_.setpoint_cp().M
+        goal = PyKDL.Frame()
+        goal.p = self.psm2_.setpoint_cp().p
+        goal.M = self.psm2_.setpoint_cp().M
+
+        amplitude = 0.05 # 5 cm
+
+         # second motion
+        goal.p[0] =  initial_cartesian_position.p[0] 
+        goal.p[1] =  initial_cartesian_position.p[1]
+        goal.p[2] =  initial_cartesian_position.p[2] 
+        # if (len(self.rings_poses_) > 0):
+        for i in range(0, 2):
+            xring = self.rings_poses_[i].position.x 
+            yring = self.rings_poses_[i].position.y
+            zring = self.rings_poses_[i].position.z
+
+            goal.p[0] = goal.p[0] - xring #puo essere piu o meno in base alla direzioni degli assi 
+            goal.p[1] = goal.p[1] - yring
+            goal.p[2] = goal.p[2] - zring
+
+            print('closing and moving right (1)')
+            self.psm2_.move_cp(goal).wait(is_busy = False)
+            self.psm2_.jaw.close().wait()
+
+            xpeg = self.pegs_poses_[i].position.x 
+            ypeg = self.pegs_poses_[i].position.y
+            zpeg = self.pegs_poses_[i].position.z
+
+            goal.p[0] = goal.p[0] - xpeg #puo essere piu o meno in base alla direzioni degli assi 
+            goal.p[1] = goal.p[1] - ypeg
+            goal.p[2] = goal.p[2] - zpeg
+            
+            print('closing and moving right (1)')
+            self.psm2_.move_cp(goal).wait(is_busy = False)
+            self.psm2_.jaw.close().wait()
+        #else :
+      #       print('do run coppelia')
+
+            
+
+
 
     def update(self):
         print ('UPDATE')
+        # print(len(self.rings_poses_))
 
 
 
@@ -104,11 +234,24 @@ def main():
     
     simple_peg_ring = SimplePegRing(ral)
     
-    rate = 100 # Hz
-    ros_rate = rospy.Rate(rate)
-    while not rospy.is_shutdown():
-        simple_peg_ring.update()
-        ros_rate.sleep()
+   
+
+    # rate = 100 # Hz
+    # ros_rate = rospy.Rate(rate)
+
+    # test_move = True
+    # while not rospy.is_shutdown():
+        # if test_move:
+    # simple_peg_ring.test_kinematics()
+        # simple_peg_ring.test2_kinematics()
+
+            # test_move = False
+        # simple_peg_ring.update()
+        # ros_rate.sleep()
+    # rospy.spin()
+
+
+    ral.spin_and_execute(simple_peg_ring.test_kinematics)
 
 if __name__ == '__main__':
     main()
