@@ -146,7 +146,7 @@ class SimplePegRing():
                 # print(xring, ' ', yring, ' ', zring)                
                 # puo essere piu o meno in base alla direzioni degli assi 
                 goal.p[0] = goal.p[0] - xring 
-                goal.p[1] = goal.p[1] + yring
+                goal.p[1] = goal.p[1] - yring
                 goal.p[2] = goal.p[2] - zring
 
                 self.psm1_.move_cp(goal).wait(is_busy = True)
@@ -165,8 +165,8 @@ class SimplePegRing():
                 goal.p[1] = goal.p[1] + ypeg
                 goal.p[2] = goal.p[2] - zpeg
                 
-                self.psm1_.move_cp(goal).wait(is_busy = True)
-                self.psm1_.jaw.close().wait()
+                # self.psm1_.move_cp(goal).wait(is_busy = True)
+                # self.psm1_.jaw.close().wait()
         else :
             print('[ERROR] maybe run coppelia')
 
