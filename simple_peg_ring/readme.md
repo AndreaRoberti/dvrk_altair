@@ -14,7 +14,7 @@ Open the coppelia scene.
 Then, in terminal one :
 
 ``` bash
-rosrun dvrk_robot dvrk_console_json -j /home/andrea/dvrk_latest_ws/src/sawIntuitiveResearchKit/share/console/console-PSM1_PSM2_KIN_SIMULATED.json 
+rosrun dvrk_robot dvrk_console_json -j ~/dvrk_latest_ws/src/sawIntuitiveResearchKit/share/console/console-PSM1_PSM2_KIN_SIMULATED.json 
 ```
 - POWER ON
 - HOME

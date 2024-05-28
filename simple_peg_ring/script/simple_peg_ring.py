@@ -64,7 +64,6 @@ class SimplePegRing():
         T_matrix = numpy.dot(trasl_matrix, rot_matrix)
         return T_matrix
 
-
     def home(self, arm):
         self.ral.check_connections()
 
@@ -115,58 +114,13 @@ class SimplePegRing():
         amplitude = 0.05 # 5 cm
 
          # first motion
-        goal.p[0] =  initial_cartesian_position.p[0] 
+        goal.p[0] =  initial_cartesian_position.p[0]  + amplitude
         goal.p[1] =  initial_cartesian_position.p[1]
-        goal.p[2] =  initial_cartesian_position.p[2] 
+        goal.p[2] =  initial_cartesian_position.p[2]
         
-        initial_matrix_t = tf.transformations.translation_matrix( [initial_cartesian_position.p[0], initial_cartesian_position.p[1], initial_cartesian_position.p[2]])
-        initial_matrix_rot = numpy.array([[ initial_cartesian_position.M[0,0], initial_cartesian_position.M[0,1], initial_cartesian_position.M[0,2], 0 ],
-                                          [ initial_cartesian_position.M[1,0], initial_cartesian_position.M[1,1], initial_cartesian_position.M[1,2], 0 ],
-                                          [ initial_cartesian_position.M[2,0], initial_cartesian_position.M[2,1], initial_cartesian_position.M[2,2], 0 ],
-                                          [0,0,0,1]] )
-        initial_matrix = numpy.dot(initial_matrix_t,initial_matrix_rot)
-        print(initial_matrix)
-        print("PSM1 WRT WORLD")
-        psm1_to_world = numpy.dot(self.psm1_base_to_world_,initial_matrix)
-        print(psm1_to_world)
+        self.psm1_.move_cp(goal).wait(is_busy = True)
+        self.psm1_.jaw.close().wait() 
         
-        if (len(self.rings_poses_) > 0):
-            for i in range(5, 6):
-                ring_matrix = self.getMatrix([self.rings_poses_[i].position.x, self.rings_poses_[i].position.y, self.rings_poses_[i].position.z, 
-                                              0,0,0,1] )
-                # print(self.psm1_base_to_world_)
-                # print(ring_matrix)
-
-                transform_ring_to_psm = self.convertToPSM_Base(ring_matrix, psm1_to_world)
-                print('RING WRT PSM\n', transform_ring_to_psm)
-
-                xring = transform_ring_to_psm[0][3] 
-                yring = transform_ring_to_psm[1][3]
-                zring = transform_ring_to_psm[2][3]                
-                # print(xring, ' ', yring, ' ', zring)                
-                # puo essere piu o meno in base alla direzioni degli assi 
-                goal.p[0] = goal.p[0] - xring 
-                goal.p[1] = goal.p[1] - yring
-                goal.p[2] = goal.p[2] - zring
-
-                self.psm1_.move_cp(goal).wait(is_busy = True)
-                self.psm1_.jaw.close().wait()
-                #----------------------------------------------------------------------------------------------------
-                peg_matrix = self.getMatrix([self.pegs_poses_[1].position.x, self.pegs_poses_[1].position.y, self.pegs_poses_[1].position.z, 
-                                              0,0,0,1] )
-
-                transform_peg_to_psm = self.convertToPSM_Base(peg_matrix, psm1_to_world)
-                print('PEG WRT PSM\n' , transform_peg_to_psm)
-                xpeg = xring = transform_ring_to_psm[0][3] 
-                ypeg = yring = transform_ring_to_psm[1][3]
-                zpeg = zring = transform_ring_to_psm[2][3]   
-                # puo essere piu o meno in base alla direzioni degli assi 
-                goal.p[0] = goal.p[0] - xpeg 
-                goal.p[1] = goal.p[1] + ypeg
-                goal.p[2] = goal.p[2] - zpeg
-                
-                # self.psm1_.move_cp(goal).wait(is_busy = True)
-                # self.psm1_.jaw.close().wait()
         else :
             print('[ERROR] maybe run coppelia')
 
