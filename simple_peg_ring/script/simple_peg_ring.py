@@ -5,6 +5,7 @@ numpy.set_printoptions(suppress=True)
 
 import rospy
 
+import time
 import crtk
 import dvrk
 import math
@@ -42,6 +43,8 @@ class SimplePegRing():
         self.psm2_ = dvrk.psm(ral = self.ral,
                             arm_name = 'PSM2',
                             expected_interval = 0.01)
+        
+        self.expected_interval_ = 0.01
 
         self.psm1_base_to_world_ = self.getMatrix([-1.538, -0.138, 0.799,-0.000, 0.000, 0.574, 0.819])
         self.psm2_base_to_world_ = self.getMatrix([-0.657, -1.400, -0.799, -0.000, -0.000, -0.819, 0.574])
@@ -111,7 +114,7 @@ class SimplePegRing():
         goal.p = self.psm1_.setpoint_cp().p
         goal.M = self.psm1_.setpoint_cp().M
         
-        amplitude = 0.05 # 5 cm
+        amplitude = 0.1 # 5 cm
 
          # first motion
         goal.p[0] =  initial_cartesian_position.p[0]  + amplitude
@@ -121,8 +124,68 @@ class SimplePegRing():
         self.psm1_.move_cp(goal).wait(is_busy = True)
         self.psm1_.jaw.close().wait() 
         
-        else :
-            print('[ERROR] maybe run coppelia')
+        # else :
+        #     print('[ERROR] maybe run coppelia')
+
+
+    def run_spiral_trajectory(self):
+        print('starting spiral trajectory')
+        # get current position
+        initial_joint_position = numpy.copy(self.psm1_.setpoint_jp())
+        print('testing spiral trajectory with initial joint positions: %s' % str(initial_joint_position))
+        
+        amplitude = math.radians(10.0)  # +/- 25 degrees for joint movement
+        duration = 30  # seconds, adjust as needed
+        samples = duration / self.expected_interval_
+        
+        # create a new goal starting with the current position
+        goal_p = numpy.copy(initial_joint_position)
+        goal_v = numpy.zeros(goal_p.size)
+        start = time.time()
+
+        sleep_rate = self.ral.create_rate(1.0 / self.expected_interval_)
+        
+        for i in range(int(samples)):
+            # Compute angle for circular motion (spiral)
+            angle = i * math.radians(360.0) / samples
+            
+            # Change in x, y, z to create a spiral trajectory
+            # Assuming joint[0] and joint[1] are the ones for spiral, and joint[5] is adjusted for z height
+            
+            # For a spiral, modify the first two joints (0 and 1) to move in a circle
+            goal_p[0] = initial_joint_position[0] + amplitude * math.cos(angle)
+            goal_p[1] = initial_joint_position[1] + amplitude * math.sin(angle)
+            
+            # Gradual increase in z-axis (or joint[5]) for the spiral effect
+            goal_p[3] = initial_joint_position[5] + 0.05 * i  # Adjust the z-axis increment (0.01 can be changed)
+
+            # Set the velocity for smooth movement
+            goal_v[0] = amplitude * -math.sin(angle)
+            goal_v[1] = amplitude * math.cos(angle)
+            goal_v[3] = 0.01  # Smooth increment for the z-axis
+
+            # goal_p[2] =  0.11
+            # goal_v[2] = 0.01
+
+            goal_p[4] = 0
+            goal_v[4] = 0
+            goal_p[5] = 0
+            goal_v[5] = 0
+
+            # Maintain the rest of the joints at their initial positions (if they are not moving)
+            for j in range(2, 5):
+                goal_p[j] = initial_joint_position[j]
+                goal_v[j] = 0
+
+            # Send the new joint positions and velocities to the robot
+            self.psm1_.servo_jp(goal_p, goal_v)
+            
+            # Sleep to maintain the specified rate
+            sleep_rate.sleep()
+
+        actual_duration = time.time() - start
+        print('Spiral trajectory complete in %2.2f seconds (expected %2.2f)' % (actual_duration, duration))
+
 
     def update(self):
         print ('UPDATE')
@@ -138,7 +201,7 @@ def main():
     
     simple_peg_ring = SimplePegRing(ral)
 
-    ral.spin_and_execute(simple_peg_ring.test_kinematics)
+    ral.spin_and_execute(simple_peg_ring.run_spiral_trajectory)
 
 if __name__ == '__main__':
     main()

@@ -242,14 +242,69 @@ class example_application:
         self.arm.move_cp(goal).wait()
         print('move_cp complete')
 
+    # direct cartesian velocity control example
+    def run_cartesian_velocity(self):
+        print('starting cartesian velocity control')
+        self.prepare_cartesian()
+
+        # Get the current Cartesian position
+        initial_pose = PyKDL.Frame()
+        initial_pose.p = self.arm.setpoint_cp().p
+        initial_pose.M = self.arm.setpoint_cp().M
+
+        # Velocity command (example: move in X direction and rotate around Z-axis)
+        cartesian_velocity = numpy.array([0.005, 0.0, 0.0, 0.0, 0.0, 0.1])  # [vx, vy, vz, wx, wy, wz]
+
+        # Time parameters
+        duration = 15.0  # seconds
+        samples = int(duration / self.expected_interval)
+        dt = self.expected_interval
+
+        sleep_rate = self.ral.create_rate(1.0 / dt)
+
+        for i in range(samples):
+            # Compute new Cartesian pose based on velocity
+            displacement = PyKDL.Vector(
+                cartesian_velocity[0] * dt,
+                cartesian_velocity[1] * dt,
+                cartesian_velocity[2] * dt
+            )
+            rotation = PyKDL.Rotation.RPY(
+                cartesian_velocity[3] * dt,
+                cartesian_velocity[4] * dt,
+                cartesian_velocity[5] * dt
+            )
+            delta_pose = PyKDL.Frame(rotation, displacement)
+
+            # Update goal pose
+            initial_pose = initial_pose * delta_pose
+
+            # Send the new Cartesian pose
+            self.arm.servo_cp(initial_pose)
+
+            # Check for potential errors
+            setpoint_cp = self.arm.setpoint_cp()
+            errorX = initial_pose.p[0] - setpoint_cp.p[0]
+            errorY = initial_pose.p[1] - setpoint_cp.p[1]
+            errorZ = initial_pose.p[2] - setpoint_cp.p[2]
+            error = math.sqrt(errorX**2 + errorY**2 + errorZ**2)
+            if error > 0.002:  # 2 mm tolerance
+                print(f"Tracking error detected: {error:.4f} meters")
+
+            sleep_rate.sleep()
+
+        print('Cartesian velocity control complete')
+
+
     # main method
     def run(self):
         self.home()
-        self.run_get()
-        self.run_servo_jp()
-        self.run_move_jp()
-        self.run_servo_cp()
-        self.run_move_cp()
+        # self.run_get()
+        # self.run_servo_jp()
+        # self.run_move_jp()
+        # self.run_servo_cp()
+        # self.run_move_cp()
+        self.run_cartesian_velocity()  # New method for Cartesian velocity control
 
 if __name__ == '__main__':
     # extract ros arguments (e.g. __ns:= for namespace)
